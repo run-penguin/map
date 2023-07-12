@@ -12,3 +12,34 @@ html, body {
     height: calc(100vh - 60px);
 }
 
+
+/* custom overlay */
+.js-ship {
+    position: absolute;
+}
+.js-ship-img {
+    position: absolute;  /* 없으면 .ship-active보다 아래로 내려감 */
+    width: 16px;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    cursor: pointer;
+}
+.js-ship-name {
+    position: absolute;
+    top: 25px;
+    font-size: 14px;
+    font-weight: 900;
+    text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+    z-index: 999;
+    width: 130px;
+    text-align: center;
+    transform: translate(-50%, -50%);
+}
+.js-ship-active {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    left: 0;
+    top: 0;
+    opacity: .7;
+    z-index: 10;
+}

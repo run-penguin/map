@@ -22,6 +22,7 @@
                 </div>
                 <div class="col-auto">
                     <button id="showMarker" class="btn btn-primary">Marker</button>
+                    <button id="showOverlay" class="btn btn-primary">Custom Overlay</button>
                 </div>
                 
                 
