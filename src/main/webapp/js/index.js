@@ -94,6 +94,56 @@ function initMap() {
             panes.overlayLayer.appendChild(this.div);
 
             this.getPanes().overlayMouseTarget.appendChild(this.div);
+
+
+            // infoWindow
+            const divInfo = document.createElement('div');
+            divInfo.className = 'js-ship-info';
+
+            const tbInfo = document.createElement('table');
+            tbInfo.className = 'table';
+            divInfo.append(tbInfo);
+
+            const tbdInfo = document.createElement('tbody');
+            tbInfo.append(tbdInfo);
+
+            const trName = document.createElement('tr');
+            tbdInfo.append(trName);
+
+            const thName = document.createElement('th');
+            thName.setAttribute('scope', 'row');
+            thName.innerText = 'Name: ';
+            trName.append(thName);
+
+            const tdName = document.createElement('td');
+            tdName.innerText = this.dto.name;
+            trName.append(tdName);
+
+            const trHdt = document.createElement('tr');
+            tbdInfo.append(trHdt);
+
+            const thHdt = document.createElement('th');
+            thHdt.setAttribute('scope', 'row');
+            thHdt.innerText = 'HDT: '
+            trHdt.append(thHdt);
+
+            const tdHdt = document.createElement('td');
+            tdHdt.innerText = this.dto.current.hdt;
+            trHdt.append(tdHdt);
+
+            const infoWin = new google.maps.InfoWindow({
+                content: divInfo,
+                position: new google.maps.LatLng(this.dto.current.lat, this.dto.current.lon),
+                shouldFocus: false
+            });
+            
+            imgShip.addEventListener('mouseover', function() {
+                infoWin.open(map);
+            });
+
+            imgShip.addEventListener('mouseout', function() {
+                infoWin.close();
+            });
         }
 
         draw() {
