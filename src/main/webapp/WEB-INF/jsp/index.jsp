@@ -26,10 +26,29 @@
                     <button id="showRoute" class="btn btn-primary">Route</button>
                     <button id="clear" class="btn btn-light">Clear</button>
                 </div>
-                
-                
+                <div class="col-auto">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Weather</button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <button type="button" class="dropdown-item js-weather" value="1">Cloud (구름)</button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item js-weather" value="2">Precipitation (강수)</button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item js-weather" value="3">Atm press. (기압)</button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item js-weather" value="4">Wind (풍속)</button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item js-weather" value="5">Temp. (온도)</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            
         </div>
         <div id="map">
 

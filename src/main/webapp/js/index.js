@@ -254,6 +254,47 @@ function addEvents() {
     document.getElementById('clear').addEventListener('click', function() {
         clearMap();
     });
+
+    document.querySelectorAll('.js-weather').forEach((ctl) => {
+        ctl.addEventListener('click', function() {
+
+            map.overlayMapTypes.clear();
+
+            const url = 'https://tile.openweathermap.org/map';
+            const appId = 'your app id';
+
+            let layer;
+            switch (Number(this.value)) {
+                case 1:
+                layer = '/clouds_new/';
+                break;
+            case 2:
+                layer = '/precipitation_new/';
+                break;
+            case 3:
+                layer = '/pressure_new/';
+                break;
+            case 4:
+                layer = '/wind_new/';
+                break;
+            case 5:
+                layer = '/temp_new/';
+                break;
+            }
+
+            const type = new google.maps.ImageMapType({
+                getTileUrl: (coord, zoom) => {
+                    return `${url}${layer}${zoom}/${coord.x}/${coord.y}.png?appId=${appId}`
+                },
+                tileSize: new google.maps.Size(256, 256),
+                maxZoom: 9,
+                minZoom: 0,
+                name: 'mapType'
+            });
+
+            map.overlayMapTypes.insertAt(0, type);
+        });
+    });
 }
 
 function clearMap() {
