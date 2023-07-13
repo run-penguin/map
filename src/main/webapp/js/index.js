@@ -2,9 +2,26 @@
 
 
 const ships = [
-    { id: 1, name: '테스트 선박1', current: { lat: 36.5, lon: 130.39, hdt: 0 } },
-    { id: 2, name: '테스트 선박2', current: { lat: 36.0, lon: 130.39, hdt: 45 } },
-    { id: 3, name: '테스트 선박3', current: { lat: 35.5, lon: 130.39, hdt: 90 } }
+    { 
+        id: 1, 
+        name: '테스트 선박1', 
+        current: { lat: 36.5, lon: 130.39, hdt: 0 },
+        route: [
+            { lat: 36.5, lon: 130.39 },
+            { lat: 36.0, lon: 130.30 },
+            { lat: 35.5, lon: 130.28 },
+        ]
+    },
+    { 
+        id: 2, 
+        name: '테스트 선박2', 
+        current: { lat: 36.0, lon: 130.39, hdt: 45 } 
+    },
+    { 
+        id: 3, 
+        name: '테스트 선박3', 
+        current: { lat: 35.5, lon: 130.39, hdt: 90 } 
+    }
 ];
 
 window.onload = function() {
@@ -17,11 +34,16 @@ window.onload = function() {
         opt.innerText = shipDto.name;
         shipList.append(opt);
     });
+
+    addEvents();
 }
+
 
 let map;
 let marker;
 let overlay;
+let cirs = [];
+let outline; let innerline;
 function initMap() {
 
     map = new google.maps.Map(document.getElementById('map'), {
@@ -75,8 +97,9 @@ function initMap() {
         }
 
         draw() {
+
             if (this.div) {
-                
+
                 const projection = this.getProjection();
                 const pixel = projection.fromLatLngToDivPixel(this.position);
 
@@ -96,18 +119,28 @@ function initMap() {
         }
     }
 
-
-    document.getElementById('showMarker').addEventListener('click', function() {
+    document.getElementById('showOverlay').addEventListener('click', function() {
 
         if (marker) marker.setMap(null);
 
         if (overlay) {
-            // overlay.onRemove();
-            const oldOverlay = overlay;
+            overlay.onRemove();
             overlay = null;
-
-            oldOverlay.onRemove();
         }
+
+        const shipId = document.getElementById('shipList').value;
+        const shipDto = ships[shipId - 1];
+
+        overlay = new CustomOverlay(shipDto);
+        overlay.setMap(map);
+    });
+}
+
+function addEvents() {
+
+    document.getElementById('showMarker').addEventListener('click', function() {
+
+        clearMap();
         
         const shipId = document.getElementById('shipList').value;
         const shipDto = ships[shipId - 1];
@@ -120,23 +153,80 @@ function initMap() {
         });
     });
 
-    document.getElementById('showOverlay').addEventListener('click', function() {
-
-        if (marker) marker.setMap(null);
-
-        if (overlay) {
-            // overlay.onRemove();
-            const oldOverlay = overlay;
-            overlay = null;
-
-            oldOverlay.onRemove();
-        }
-
+    document.getElementById('showRoute').addEventListener('click', function() {
+        
         const shipId = document.getElementById('shipList').value;
-        const shipDto = ships[shipId - 1];
+        const waypoints = ships[shipId - 1].route;
 
-        const newOverlay = new CustomOverlay(shipDto);
-        newOverlay.setMap(map);
-        overlay = newOverlay;
+        let positions = [];
+
+        waypoints.forEach((waypoint) => {
+
+            const position = new google.maps.LatLng(waypoint.lat, waypoint.lon);
+            positions.push(position);
+
+            const cir = new google.maps.Marker({
+                position: position,
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    strokeColor: '#289bce',
+                    strokeWeight: 2,
+                    fillColor: '#40bdf4',
+                    fillOpacity: 1,
+                    scale: 4
+                },
+                map: map
+            });
+            cirs.push(cir);
+        });
+
+        outline = new google.maps.Polyline({
+            path: positions,
+            strokeColor: '#289bce',
+            strokeOpacity: 1,
+            strokeWeight: 5,
+            zIndex: 5,
+            cursor: 'url("https://maps.gstatic.com/mapfiles/openhand_8_8.cur"), default'
+        });
+        outline.setMap(map);
+
+        innerline = new google.maps.Polyline({
+            path: positions,
+            strokeColor: '#40bdf4',
+            strokeOpacity: 1,
+            strokeWeight: 3,
+            zIndex: 5,
+            cursor: 'url("https://maps.gstatic.com/mapfiles/openhand_8_8.cur"), default'
+        });
+        innerline.setMap(map);
     });
+
+    document.getElementById('clear').addEventListener('click', function() {
+        clearMap();
+    });
+}
+
+function clearMap() {
+
+    if (marker) marker.setMap(null);
+
+    if (overlay) {
+        overlay.onRemove();
+        overlay = null;
+    }
+
+    cirs.forEach((cir) => {
+        cir.setMap(null);
+    });
+    cirs = [];
+
+    if (outline) {
+        outline.setMap(null);
+        outline = null;
+    }
+
+    if (innerline) {
+        innerline.setMap(null);
+        innerline = null;
+    }
 }

@@ -23,6 +23,8 @@
                 <div class="col-auto">
                     <button id="showMarker" class="btn btn-primary">Marker</button>
                     <button id="showOverlay" class="btn btn-primary">Custom Overlay</button>
+                    <button id="showRoute" class="btn btn-primary">Route</button>
+                    <button id="clear" class="btn btn-light">Clear</button>
                 </div>
                 
                 
